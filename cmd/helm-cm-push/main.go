@@ -74,7 +74,7 @@ var (
 
 Examples:
 
-  $ helm push mychart-0.1.0.tgz chartmuseum       # push .tgz from "helm package"
+  $ helm push mariadb-5.11.3.tgz chartmuseum       # push .tgz from "helm package"
   $ helm push . chartmuseum                       # package and push chart directory
   $ helm push . --version="7c4d121" chartmuseum   # override version in Chart.yaml
   $ helm push . https://my.chart.repo.com         # push directly to chart repo URL

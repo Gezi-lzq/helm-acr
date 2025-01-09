@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-var testTarballPath = "../../testdata/charts/helm2/mychart/mychart-0.1.0.tgz"
+var testTarballPath = "../../testdata/charts/helm2/mychart/mariadb-5.11.3.tgz"
 
 func TestSetVersion(t *testing.T) {
 	c, err := GetChartByName(testTarballPath)
@@ -22,7 +22,7 @@ func TestSetVersion(t *testing.T) {
 
 func TestGetChartByName(t *testing.T) {
 	// Bad name
-	_, err := GetChartByName("/non/existent/path/mychart-0.1.0.tgz")
+	_, err := GetChartByName("/non/existent/path/mariadb-5.11.3.tgz")
 	if err == nil {
 		t.Error("expected error getting chart with bad name, instead got nil")
 	}
@@ -57,7 +57,7 @@ func TestCreateChartPackage(t *testing.T) {
 		t.Error("unexpected error creating chart package", err)
 	}
 
-	expectedPath := path.Join(tmp, "mychart-0.1.0.tgz")
+	expectedPath := path.Join(tmp, "mariadb-5.11.3.tgz")
 	if chartPackagePath != expectedPath {
 		t.Errorf("expected chart path to be %s, but was %s", expectedPath, chartPackagePath)
 	}

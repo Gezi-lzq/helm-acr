@@ -19,7 +19,7 @@ import (
 )
 
 var (
-	testTarballPath    = "../../testdata/charts/helm2/mychart/mychart-0.1.0.tgz"
+	testTarballPath    = "../../testdata/charts/helm2/mychart/mariadb-5.11.3.tgz"
 	testCertPath       = "../../testdata/tls/test_cert.crt"
 	testKeyPath        = "../../testdata/tls/test_key.key"
 	testCAPath         = "../../testdata/tls/ca.crt"
@@ -146,12 +146,12 @@ func TestPushCmd(t *testing.T) {
 		t.Error("unexpected error trying to download index.yaml", err)
 	}
 
-	// charts/mychart-0.1.0.tgz
-	args = []string{"", "", "", downloaderBaseURL + "/charts/mychart-0.1.0.tgz"}
+	// charts/mariadb-5.11.3.tgz
+	args = []string{"", "", "", downloaderBaseURL + "/charts/mariadb-5.11.3.tgz"}
 	cmd = newPushCmd(args)
 	err = cmd.RunE(cmd, args)
 	if err != nil {
-		t.Error("unexpected error trying to download charts/mychart-0.1.0.tgz", err)
+		t.Error("unexpected error trying to download charts/mariadb-5.11.3.tgz", err)
 	}
 }
 
