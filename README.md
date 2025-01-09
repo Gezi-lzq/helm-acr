@@ -1,7 +1,7 @@
 # helm acr
 
-[![CircleCI](https://circleci.com/gh/AliyunContainerService/helm-acr.svg?style=svg)](https://circleci.com/gh/AliyunContainerService/helm-acr)
-[![Go Report Card](https://goreportcard.com/badge/github.com/AliyunContainerService/helm-acr)](https://goreportcard.com/report/github.com/AliyunContainerService/helm-acr)
+[![CircleCI](https://circleci.com/gh/Gezi-lzq/helm-acr.svg?style=svg)](https://circleci.com/gh/Gezi-lzq/helm-acr)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Gezi-lzq/helm-acr)](https://goreportcard.com/report/github.com/Gezi-lzq/helm-acr)
 
 Helm plugin to push chart package to [ChartMuseum](https://github.com/helm/chartmuseum).
 
@@ -19,7 +19,7 @@ Some modifications has been made to meet the security requirements on Alibaba Cl
 yum install -y git
 
 # install plugin
-helm plugin install https://github.com/AliyunContainerService/helm-acr
+helm plugin install https://github.com/Gezi-lzq/helm-acr
 ```
 
 ### Usage
