@@ -12,11 +12,11 @@ echo "Downloading and installing helm-acr v${version} ..."
 
 url=""
 if [ "$(uname)" = "Darwin" ]; then
-    url="https://github.com/AliyunContainerService/helm-acr/releases/download/v${version}/helm-acr_${version}_darwin_amd64.tar.gz"
+    url="https://github.com/Gezi-lzq/helm-acr/releases/download/v${version}/helm-acr_${version}_darwin_amd64.tar.gz"
 elif [ "$(uname)" = "Linux" ] ; then
-    url="https://github.com/AliyunContainerService/helm-acr/releases/download/v${version}/helm-acr_${version}_linux_amd64.tar.gz"
+    url="https://github.com/Gezi-lzq/helm-acr/releases/download/v${version}/helm-acr_${version}_linux_amd64.tar.gz"
 else
-    url="https://github.com/AliyunContainerService/helm-acr/releases/download/v${version}/helm-acr_${version}_windows_amd64.tar.gz"
+    url="https://github.com/Gezi-lzq/helm-acr/releases/download/v${version}/helm-acr_${version}_windows_amd64.tar.gz"
 fi
 
 echo $url
