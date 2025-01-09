@@ -145,7 +145,7 @@ func TestUploadChartPackage(t *testing.T) {
 	}
 }
 
-func removeTestUploadChartPackageWithTlsServer(t *testing.T) {
+func TestUploadChartPackageWithTlsServer(t *testing.T) {
 	basicAuthHeader := "Basic " + base64.StdEncoding.EncodeToString([]byte("user:pass"))
 	ts := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if !strings.HasPrefix(r.URL.String(), "/my/context/path") {

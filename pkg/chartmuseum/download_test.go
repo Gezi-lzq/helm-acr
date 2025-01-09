@@ -53,7 +53,7 @@ func TestDownloadFile(t *testing.T) {
 	}
 }
 
-func removeTestDownloadFileFromTlsServer(t *testing.T) {
+func TestDownloadFileFromTlsServer(t *testing.T) {
 	basicAuthHeader := "Basic " + base64.StdEncoding.EncodeToString([]byte("user:pass"))
 	ts := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Header.Get("Authorization") != basicAuthHeader {
