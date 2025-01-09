@@ -32,11 +32,11 @@ func TestGetChartByName(t *testing.T) {
 	if err != nil {
 		t.Error("unexpected error getting test tarball chart", err)
 	}
-	if c.V2.Metadata.Name != "mychart" {
-		t.Errorf("expexted chart name to be mychart, instead got %s", c.V2.Metadata.Name)
+	if c.V2.Metadata.Name != "mariadb" {
+		t.Errorf("expexted chart name to be mariadb, instead got %s", c.V2.Metadata.Name)
 	}
-	if c.V2.Metadata.Version != "0.1.0" {
-		t.Errorf("expexted chart version to be 0.1.0, instead got %s", c.V2.Metadata.Version)
+	if c.V2.Metadata.Version != "5.11.3" {
+		t.Errorf("expexted chart version to be 5.11.3, instead got %s", c.V2.Metadata.Version)
 	}
 }
 
