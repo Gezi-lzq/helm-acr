@@ -1,12 +1,15 @@
 package chartmuseum
 
 import (
+	"crypto/rand"
 	"crypto/tls"
 	"encoding/base64"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"k8s.io/helm/pkg/tlsutil"
 )
 
 var (
@@ -226,57 +229,57 @@ func TestUploadChartPackageWithTlsServer(t *testing.T) {
 	}
 }
 
-// func TestUploadChartPackageWithVerifyingClientCert(t *testing.T) {
-// 	basicAuthHeader := "Basic " + base64.StdEncoding.EncodeToString([]byte("user:pass"))
-// 	ts := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-// 		if !strings.HasPrefix(r.URL.String(), "/my/context/path") {
-// 			w.WriteHeader(404)
-// 		} else if r.Header.Get("Authorization") != basicAuthHeader {
-// 			w.WriteHeader(401)
-// 		} else {
-// 			w.WriteHeader(201)
-// 		}
-// 	}))
+func TestUploadChartPackageWithVerifyingClientCert(t *testing.T) {
+	basicAuthHeader := "Basic " + base64.StdEncoding.EncodeToString([]byte("user:pass"))
+	ts := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !strings.HasPrefix(r.URL.String(), "/my/context/path") {
+			w.WriteHeader(404)
+		} else if r.Header.Get("Authorization") != basicAuthHeader {
+			w.WriteHeader(401)
+		} else {
+			w.WriteHeader(201)
+		}
+	}))
 
-// 	cert, err := tls.LoadX509KeyPair(testCertPath, testKeyPath)
-// 	if err != nil {
-// 		t.Fatalf("failed to load certificate and key with error: %s", err.Error())
-// 	}
+	cert, err := tls.LoadX509KeyPair(testCertPath, testKeyPath)
+	if err != nil {
+		t.Fatalf("failed to load certificate and key with error: %s", err.Error())
+	}
 
-// 	caCertPool, err := tlsutil.CertPoolFromFile(testServerCAPath)
-// 	if err != nil {
-// 		t.Fatalf("load server CA file failed with error: %s", err.Error())
-// 	}
+	caCertPool, err := tlsutil.CertPoolFromFile(testServerCAPath)
+	if err != nil {
+		t.Fatalf("load server CA file failed with error: %s", err.Error())
+	}
 
-// 	ts.TLS = &tls.Config{
-// 		ClientCAs:    caCertPool,
-// 		ClientAuth:   tls.RequireAndVerifyClientCert,
-// 		Certificates: []tls.Certificate{cert},
-// 		Rand:         rand.Reader,
-// 	}
-// 	ts.StartTLS()
-// 	defer ts.Close()
+	ts.TLS = &tls.Config{
+		ClientCAs:    caCertPool,
+		ClientAuth:   tls.RequireAndVerifyClientCert,
+		Certificates: []tls.Certificate{cert},
+		Rand:         rand.Reader,
+	}
+	ts.StartTLS()
+	defer ts.Close()
 
-// 	//Upload with cert and key files
-// 	cmClient, err := NewClient(
-// 		URL(ts.URL),
-// 		Username("user"),
-// 		Password("pass"),
-// 		ContextPath("/my/context/path"),
-// 		KeyFile(testServerKeyPath),
-// 		CertFile(testServerCertPath),
-// 		CAFile(testCAPath),
-// 		InsecureSkipVerify(true),
-// 	)
-// 	if err != nil {
-// 		t.Fatalf("[upload with cert and key files] expect creating a client instance but met error: %s", err)
-// 	}
+	//Upload with cert and key files
+	cmClient, err := NewClient(
+		URL(ts.URL),
+		Username("user"),
+		Password("pass"),
+		ContextPath("/my/context/path"),
+		KeyFile(testServerKeyPath),
+		CertFile(testServerCertPath),
+		CAFile(testCAPath),
+		InsecureSkipVerify(true),
+	)
+	if err != nil {
+		t.Fatalf("[upload with cert and key files] expect creating a client instance but met error: %s", err)
+	}
 
-// 	resp, err := cmClient.UploadChartPackage(testTarballPath, false)
-// 	if err != nil {
-// 		t.Fatalf("[upload with cert and key files] expected nil error but got %s", err.Error())
-// 	}
-// 	if resp.StatusCode != http.StatusCreated {
-// 		t.Fatalf("[upload with cert and key files] expect status code 201 but got %d", resp.StatusCode)
-// 	}
-// }
+	resp, err := cmClient.UploadChartPackage(testTarballPath, false)
+	if err != nil {
+		t.Fatalf("[upload with cert and key files] expected nil error but got %s", err.Error())
+	}
+	if resp.StatusCode != http.StatusCreated {
+		t.Fatalf("[upload with cert and key files] expect status code 201 but got %d", resp.StatusCode)
+	}
+}
