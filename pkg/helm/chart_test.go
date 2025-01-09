@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-var testTarballPath = "../../testdata/charts/helm2/mychart/mariadb-5.11.3.tgz"
+var testTarballPath = "../../testdata/charts/helm2/mychart/charts/mariadb-5.11.3.tgz"
 
 func TestSetVersion(t *testing.T) {
 	c, err := GetChartByName(testTarballPath)

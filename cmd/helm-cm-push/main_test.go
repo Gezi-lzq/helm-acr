@@ -19,7 +19,7 @@ import (
 )
 
 var (
-	testTarballPath    = "../../testdata/charts/helm2/mychart/mariadb-5.11.3.tgz"
+	testTarballPath    = "../../testdata/charts/helm2/mychart/charts/mariadb-5.11.3.tgz"
 	testCertPath       = "../../testdata/tls/test_cert.crt"
 	testKeyPath        = "../../testdata/tls/test_key.key"
 	testCAPath         = "../../testdata/tls/ca.crt"
