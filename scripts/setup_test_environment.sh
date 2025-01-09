@@ -43,7 +43,6 @@ install_chartmuseum() {
         mkdir -p testbin/
         pushd testbin/
         curl https://raw.githubusercontent.com/helm/chartmuseum/main/scripts/get-chartmuseum | bash
-        chmod +x ./chartmuseum
         popd
     fi
 }
