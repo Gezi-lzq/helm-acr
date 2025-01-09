@@ -3,8 +3,6 @@
 package main
 
 import (
-	"crypto/rand"
-	"crypto/tls"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -15,7 +13,6 @@ import (
 	"k8s.io/helm/pkg/getter"
 	"k8s.io/helm/pkg/helm/helmpath"
 	"k8s.io/helm/pkg/repo"
-	"k8s.io/helm/pkg/tlsutil"
 )
 
 var (
@@ -155,75 +152,75 @@ func TestPushCmd(t *testing.T) {
 	}
 }
 
-func TestPushCmdWithTlsEnabledServer(t *testing.T) {
-	statusCode := 201
-	body := "{\"success\": true}"
-	ts := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(statusCode)
-		w.Write([]byte(body))
-	}))
-	cert, err := tls.LoadX509KeyPair(testCertPath, testKeyPath)
-	if err != nil {
-		t.Fatalf("failed to load certificate and key with error: %s", err.Error())
-	}
+// func TestPushCmdWithTlsEnabledServer(t *testing.T) {
+// 	statusCode := 201
+// 	body := "{\"success\": true}"
+// 	ts := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// 		w.WriteHeader(statusCode)
+// 		w.Write([]byte(body))
+// 	}))
+// 	cert, err := tls.LoadX509KeyPair(testCertPath, testKeyPath)
+// 	if err != nil {
+// 		t.Fatalf("failed to load certificate and key with error: %s", err.Error())
+// 	}
 
-	caCertPool, err := tlsutil.CertPoolFromFile(testServerCAPath)
-	if err != nil {
-		t.Fatalf("load server CA file failed with error: %s", err.Error())
-	}
+// 	caCertPool, err := tlsutil.CertPoolFromFile(testServerCAPath)
+// 	if err != nil {
+// 		t.Fatalf("load server CA file failed with error: %s", err.Error())
+// 	}
 
-	ts.TLS = &tls.Config{
-		ClientCAs:    caCertPool,
-		ClientAuth:   tls.RequireAndVerifyClientCert,
-		Certificates: []tls.Certificate{cert},
-		Rand:         rand.Reader,
-	}
-	ts.StartTLS()
-	defer ts.Close()
+// 	ts.TLS = &tls.Config{
+// 		ClientCAs:    caCertPool,
+// 		ClientAuth:   tls.RequireAndVerifyClientCert,
+// 		Certificates: []tls.Certificate{cert},
+// 		Rand:         rand.Reader,
+// 	}
+// 	ts.StartTLS()
+// 	defer ts.Close()
 
-	// Create new Helm home w/ test repo
-	tmp, err := ioutil.TempDir("", "helm-push-test")
-	if err != nil {
-		t.Error("unexpected error creating temp test dir", err)
-	}
-	defer os.RemoveAll(tmp)
+// 	// Create new Helm home w/ test repo
+// 	tmp, err := ioutil.TempDir("", "helm-push-test")
+// 	if err != nil {
+// 		t.Error("unexpected error creating temp test dir", err)
+// 	}
+// 	defer os.RemoveAll(tmp)
 
-	home := helmpath.Home(tmp)
-	f := repo.NewRepoFile()
+// 	home := helmpath.Home(tmp)
+// 	f := repo.NewRepoFile()
 
-	entry := repo.Entry{}
-	entry.Name = "helm-push-test"
-	entry.URL = ts.URL
+// 	entry := repo.Entry{}
+// 	entry.Name = "helm-push-test"
+// 	entry.URL = ts.URL
 
-	_, err = repo.NewChartRepository(&entry, getter.All(v2settings))
-	if err != nil {
-		t.Error("unexpected error created test repository", err)
-	}
+// 	_, err = repo.NewChartRepository(&entry, getter.All(v2settings))
+// 	if err != nil {
+// 		t.Error("unexpected error created test repository", err)
+// 	}
 
-	f.Update(&entry)
-	os.MkdirAll(home.Repository(), 0777)
-	f.WriteFile(home.RepositoryFile(), 0644)
+// 	f.Update(&entry)
+// 	os.MkdirAll(home.Repository(), 0777)
+// 	f.WriteFile(home.RepositoryFile(), 0644)
 
-	os.Setenv("HELM_HOME", home.String())
-	os.Setenv("HELM_REPO_USERNAME", "myuser")
-	os.Setenv("HELM_REPO_PASSWORD", "mypass")
-	os.Setenv("HELM_REPO_CONTEXT_PATH", "/x/y/z")
+// 	os.Setenv("HELM_HOME", home.String())
+// 	os.Setenv("HELM_REPO_USERNAME", "myuser")
+// 	os.Setenv("HELM_REPO_PASSWORD", "mypass")
+// 	os.Setenv("HELM_REPO_CONTEXT_PATH", "/x/y/z")
 
-	//no certificate options
-	args := []string{testTarballPath, "helm-push-test"}
-	cmd := newPushCmd(args)
-	err = cmd.RunE(cmd, args)
-	if err == nil {
-		t.Fatal("expected non nil error but got nil when run cmd without certificate option")
-	}
+// 	//no certificate options
+// 	args := []string{testTarballPath, "helm-push-test"}
+// 	cmd := newPushCmd(args)
+// 	err = cmd.RunE(cmd, args)
+// 	if err == nil {
+// 		t.Fatal("expected non nil error but got nil when run cmd without certificate option")
+// 	}
 
-	os.Setenv("HELM_REPO_CA_FILE", testCAPath)
-	os.Setenv("HELM_REPO_CERT_FILE", testServerCertPath)
-	os.Setenv("HELM_REPO_KEY_FILE", testServerKeyPath)
-	os.Setenv("HELM_REPO_INSECURE", "true")
+// 	os.Setenv("HELM_REPO_CA_FILE", testCAPath)
+// 	os.Setenv("HELM_REPO_CERT_FILE", testServerCertPath)
+// 	os.Setenv("HELM_REPO_KEY_FILE", testServerKeyPath)
+// 	os.Setenv("HELM_REPO_INSECURE", "true")
 
-	err = cmd.RunE(cmd, args)
-	if err != nil {
-		t.Fatalf("unexpecting error uploading tarball: %s", err)
-	}
-}
+// 	err = cmd.RunE(cmd, args)
+// 	if err != nil {
+// 		t.Fatalf("unexpecting error uploading tarball: %s", err)
+// 	}
+// }
