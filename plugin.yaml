@@ -1,5 +1,5 @@
 name: "cm-push"
-version: "0.8.3"
+version: "0.8.4"
 usage: "Please see https://github.com/Gezi-lzq/helm-acr for usage"
 description: "Push chart package to Alibaba Container Registry"
 command: "$HELM_PLUGIN_DIR/bin/helm-cm-push"
